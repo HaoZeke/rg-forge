@@ -1,0 +1,55 @@
+context:
+  version: "0.3.7.dev1"
+  build_pre: 1
+  build_num: 0
+  git_rev: 0a41bc8ba72a770db117a6a5d670c614a71a9d14
+
+package:
+  name: vesin
+  version: ${{ version }}
+
+source:
+  git: https://github.com/Luthaf/vesin.git
+  rev: ${{ git_rev }}
+
+build:
+  number: ${{ build_num }}
+  string: h${{ hash }}_${{ build_num }}_gc_${{ git_rev[:7] }}
+  skip:
+    - win
+  script:
+    file: build.nu
+    env:
+      USE_SCCACHE: ${{ env.get("USE_SCCACHE", default=0) }}
+
+requirements:
+  build:
+    - sccache
+    - cmake
+    - nushell
+    - if: unix
+      then: make
+  host:
+    - ${{ stdlib('c') }}
+    - ${{ compiler('cxx') }}
+
+about:
+  summary: Computing neighbor lists for atomistic system, unofficial C++ forge variant
+  license: BSD-3-Clause
+  license_file: LICENSE
+  repository: https://github.com/Luthaf/vesin
+  documentation: https://luthaf.fr/vesin/
+
+tests:
+  - script:
+      - conda inspect linkages -p $PREFIX $PKG_NAME
+      - if: osx
+        then:
+          - conda inspect objects -p $PREFIX $PKG_NAME
+    requirements:
+      run:
+        - conda-build
+
+extra:
+  recipe-maintainers:
+    - HaoZeke
