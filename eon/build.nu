@@ -11,7 +11,14 @@ let configure_args = [
     "--libdir=lib",
     "--buildtype=release",
     "-Dpython.install_env=prefix",
+    # Needed to pin the right Python file
     "--native-file", "native.ini",
+    # Handling conditionals
+    ...(if ($env.USE_LAMMPS == "1") {
+        ["-Dwith_lammps=True"]
+    } else {
+        []
+    })
 ]
 
 print $"INFO: Running meson setup with ($configure_args | str join ' ')"

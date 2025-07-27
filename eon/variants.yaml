@@ -1,0 +1,12 @@
+lammps_enabled:
+  - False
+  - True
+
+# What about lammps-metatomic?
+lammps_version:
+  - ""
+  - "*"
+
+zip_keys:
+  - lammps_enabled
+  - lammps_version

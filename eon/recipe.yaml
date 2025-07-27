@@ -14,11 +14,13 @@ source:
 
 build:
   number: ${{ build_num }}
-  string: h${{ hash }}_${{ build_num }}_gc_${{ git_rev[:7] }}
+  string: h${{ hash }}_${{ build_num }}_gc_${{ git_rev[:7] }}${{ "_lmp" if lammps_enabled else ""}}
   skip:
     - win
   script:
     file: build.nu
+    env:
+      USE_LAMMPS: ${{ 1 if lammps_enabled else 0 }}
 
 requirements:
   build:
@@ -44,6 +46,9 @@ requirements:
     - ${{ compiler('cxx') }}
     - ${{ compiler('fortran') }}
     - ${{ stdlib('c') }}
+    - if: lammps_enabled
+      then:
+        - lammps * ${{ lammps_version }}*
     - eigen >=3.4,<3.5
     - libblas
     - libcblas
@@ -54,6 +59,9 @@ requirements:
     - if: osx
       then: llvm-openmp
   run:
+    - if: lammps_enabled
+      then:
+        - lammps * ${{ lammps_version }}*
     - python
     - pyyaml
     - numpy
