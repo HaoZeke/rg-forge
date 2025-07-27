@@ -1,0 +1,13 @@
+* TODO Initialize with EON :epfl:
+SCHEDULED: <2025-07-27 Sun>
+:LOGBOOK:
+CLOCK: [2025-07-27 Sun 05:06]
+:END:
+- Baseline with at-least Metatomic
+* TODO Setup conventional commits
+* TODO Start documentation
+Similar to the [[https://github.com/emscripten-forge/recipes][emscripten forge]]
+* TODO Explain shortcomings
+- Hard to do split CI builds
+- Needs manual intervention to keep pack with conda-forge
+- More details in a post

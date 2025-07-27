@@ -1,4 +1,6 @@
 * About
 A forge containing packages not found elsewhere.
+** Background
+Much of the groundwork for this was written in the context of the ~mts-forge~ (now [[https://github.com/Luthaf/mts-forge][archived here]]). Eventually it was not found to be as viable for the Metatensor ecosystem as ~conda-forge~ integration. The basic concept still makes for a nice playground so it remains here.
 * License
 MIT.
