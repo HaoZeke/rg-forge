@@ -4,10 +4,13 @@ SCHEDULED: <2025-07-27 Sun>
 CLOCK: [2025-07-27 Sun 05:06]
 :END:
 - Baseline with at-least Metatomic
+* TODO Add variants for EON
 * TODO Setup conventional commits
 * TODO Start documentation
 Similar to the [[https://github.com/emscripten-forge/recipes][emscripten forge]]
 * TODO Explain shortcomings
 - Hard to do split CI builds
 - Needs manual intervention to keep pack with conda-forge
+- Nushell is terrible at getting the right environment
+  + Needed a native file to get the right python
 - More details in a post
