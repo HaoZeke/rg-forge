@@ -28,3 +28,6 @@ cmd = "rattler-build build --experimental -m conda_build_config.yaml -m {{ pkg }
 rattler-build = ">=0.42.1,<0.43"
 conda-index = ">=0.6.1,<0.7"
 nickel = ">=9.9.9,<10"
+
+[pypi-dependencies]
+rgpycrumbs = { git = "https://github.com/HaoZeke/rgpycrumbs" }
