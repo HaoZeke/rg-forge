@@ -2,7 +2,7 @@ context:
   version: "3.00.dev1"
   build_pre: 1
   build_num: 0
-  git_rev: 274f99c5f2979afeb380a0fc5d7b82060af2f554
+  git_rev: f10c407f44e90888945ab4c33f91c111e490e46e
 
 package:
   name: eon
@@ -14,13 +14,14 @@ source:
 
 build:
   number: ${{ build_num }}
-  string: h${{ hash }}_${{ build_num }}_gc_${{ git_rev[:7] }}${{ "_lmp" if lammps_enabled else ""}}
+  string: h${{ hash }}_${{ build_num }}_gc_${{ git_rev[:7] }}${{ "_lmp" if lammps_enabled else ""}}${{ "_mts" if metatomic_enabled else ""}}
   skip:
     - win
   script:
     file: build.nu
     env:
-      USE_LAMMPS: ${{ 1 if lammps_enabled else 0 }}
+      WITH_LAMMPS: ${{ 1 if lammps_enabled else 0 }}
+      WITH_METATOMIC: ${{ 1 if metatomic_enabled else 0 }}
 
 requirements:
   build:
@@ -49,6 +50,14 @@ requirements:
     - if: lammps_enabled
       then:
         - lammps * ${{ lammps_version }}*
+    - if: metatomic_enabled
+      then:
+        # always build against the CPU version of libtorch, we can still pick
+        # the cuda one at runtime [1]
+        - libtorch >=2.7,<2.8 cpu*
+        - libmetatomic-torch >=0.1.2,<0.2
+        - libmetatensor-torch
+        - python-vesin
     - eigen >=3.4,<3.5
     - libblas
     - libcblas
@@ -68,6 +77,12 @@ requirements:
     - eigen
     - fmt
     - spdlog
+    - if: metatomic_enabled
+      then:
+        - libtorch >=2.7,<2.8 cpu*
+        - libmetatomic-torch >=0.1.2,<0.2
+        - libmetatensor-torch
+        - python-vesin
     - if: osx
       then: llvm-openmp
 

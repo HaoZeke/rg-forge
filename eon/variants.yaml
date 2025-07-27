@@ -4,9 +4,13 @@ lammps_enabled:
 
 # What about lammps-metatomic?
 lammps_version:
-  - ""
   - "*"
+
+metatomic_enabled:
+  - False
+  - True
 
 zip_keys:
   - lammps_enabled
+  - metatomic_enabled
   - lammps_version
