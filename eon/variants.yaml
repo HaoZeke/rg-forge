@@ -14,3 +14,8 @@ zip_keys:
   - lammps_enabled
   - metatomic_enabled
   - lammps_version
+
+MACOSX_SDK_VERSION:
+  - "11.0"
+MACOSX_DEPLOYMENT_TARGET:
+  - "11.0"

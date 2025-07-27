@@ -14,13 +14,13 @@ source:
 
 build:
   number: ${{ build_num }}
-  string: h${{ hash }}_${{ build_num }}_gc_${{ git_rev[:7] }}${{ "_lmp" if lammps_enabled else ""}}${{ "_mts" if metatomic_enabled else ""}}
+  string: h${{ hash }}_${{ build_num }}_gc_${{ git_rev[:7] }}${{ "_lmp" if (lammps_enabled and (not aarch64)) else ""}}${{ "_mts" if metatomic_enabled else ""}}
   skip:
     - win
   script:
     file: build.nu
     env:
-      WITH_LAMMPS: ${{ 1 if lammps_enabled else 0 }}
+      WITH_LAMMPS: ${{ 1 if (lammps_enabled and (not aarch64)) else 0 }}
       WITH_METATOMIC: ${{ 1 if metatomic_enabled else 0 }}
 
 requirements:
@@ -47,7 +47,8 @@ requirements:
     - ${{ compiler('cxx') }}
     - ${{ compiler('fortran') }}
     - ${{ stdlib('c') }}
-    - if: lammps_enabled
+    # LAMMPS is not built for linux arm64, should be built for osx-arm64 but fails to find lammps
+    - if: lammps_enabled and (not aarch64)
       then:
         - lammps * ${{ lammps_version }}*
     - if: metatomic_enabled
@@ -68,7 +69,7 @@ requirements:
     - if: osx
       then: llvm-openmp
   run:
-    - if: lammps_enabled
+    - if: lammps_enabled and (not aarch64)
       then:
         - lammps * ${{ lammps_version }}*
     - python
