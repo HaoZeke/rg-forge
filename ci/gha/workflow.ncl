@@ -64,8 +64,8 @@ ${{ runner.os }}-${{ matrix.target }}-rattler-pkgs-refs/heads/main-
 "%,
           }
         },
-        makeBuildStep "plumed-metatomic",
-        makeBuildStep "py-plumed-metatomic",
+        makeBuildStep "vesin",
+        makeBuildStep "eon",
         {
           name = "Upload all packages",
           shell = "bash",
