@@ -57,7 +57,7 @@ requirements:
         - libtorch >=2.7,<2.8 cpu*
         - libmetatomic-torch >=0.1.2,<0.2
         - libmetatensor-torch
-        - python-vesin
+        - vesin
     - eigen >=3.4,<3.5
     - libblas
     - libcblas
@@ -82,7 +82,7 @@ requirements:
         - libtorch >=2.7,<2.8 cpu*
         - libmetatomic-torch >=0.1.2,<0.2
         - libmetatensor-torch
-        - python-vesin
+        - vesin
     - if: osx
       then: llvm-openmp
 
