@@ -58,6 +58,8 @@ requirements:
     - pyyaml
     - numpy
     - eigen
+    - fmt
+    - spdlog
     - if: osx
       then: llvm-openmp
 
