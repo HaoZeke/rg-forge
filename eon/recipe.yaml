@@ -38,6 +38,7 @@ requirements:
     - python
     - pip
     - numpy
+    - pyyaml
     - setuptools
     - ${{ compiler('c') }}
     - ${{ compiler('cxx') }}
@@ -54,6 +55,8 @@ requirements:
       then: llvm-openmp
   run:
     - python
+    - pyyaml
+    - numpy
     - eigen
     - if: osx
       then: llvm-openmp
