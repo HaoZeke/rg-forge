@@ -38,16 +38,13 @@ jobs:
       name: Build eon
       run: pixi r build-ci eon $TARGET_PLATFORM
       shell: bash
-    - env:
-        BINSTAR_TOKEN: ${{ secrets.BINSTAR_TOKEN }}
-        STAGING_BINSTAR_TOKEN: ${{ secrets.BINSTAR_TOKEN }}
-      if: github.event_name == 'push'
+    - if: github.event_name == 'push'
       name: Upload all packages
       run: |-
         shopt -s nullglob
         EXIT_CODE=0
         for pkg in $(find output -type f \( -name "*.conda" -o -name "*.tar.bz2" \) ); do
-          if ! rattler-build upload anaconda -o metatensor -c main -a $BINSTAR_TOKEN "${pkg}"; then
+          if ! rattler-build upload prefix -c rg-forge "${pkg}"; then
             EXIT_CODE=0 # This is a cop out, fix the exit code later
             # The issue is that there can be duplicates, which are annoying
           fi
