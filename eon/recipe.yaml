@@ -25,11 +25,20 @@ requirements:
     - ninja
     - meson
     - sccache
+    - cmake
     - nushell
+    - git
+    - if: (build_platform != target_platform)
+      then:
+        - python
+        - cross-python_${{target_platform}}
     - if: osx
       then: llvm-openmp
   host:
     - python
+    - pip
+    - numpy
+    - setuptools
     - ${{ compiler('c') }}
     - ${{ compiler('cxx') }}
     - ${{ compiler('fortran') }}
@@ -50,9 +59,11 @@ requirements:
       then: llvm-openmp
 
 tests:
+  - python:
+      imports:
+        - eon.server
   - script:
-      # - python -m eon.server -h
-      # - eonclient
+      - eonclient -h
       - conda inspect linkages -p $PREFIX $PKG_NAME
       - if: osx
         then:
