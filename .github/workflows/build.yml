@@ -1,0 +1,77 @@
+concurrency:
+  cancel-in-progress: true
+  group: ${{ github.workflow }}-${{ github.ref }}
+jobs:
+  build:
+    permissions:
+      contents: read
+      id-token: write
+    runs-on: ${{ matrix.os }}
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 1
+    - uses: prefix-dev/setup-pixi@v0.8.8
+      with:
+        cache: true
+        pixi-version: v0.46.0
+    - name: Add .pixi/envs/default to the $PATH
+      run: echo "$(pwd)/.pixi/envs/default/bin" >> $GITHUB_PATH
+      shell: bash
+    - name: Cache rattler-build built packages for ${{ matrix.target }}
+      uses: actions/cache@v4
+      with:
+        key: ${{ runner.os }}-${{ matrix.target }}-rattler-pkgs-${{ github.ref }}-${{ hashFiles('**/recipe.yaml') }}
+        path: ${{ github.workspace }}/output/${{ matrix.target }}
+        restore-keys: |-
+          ${{ runner.os }}-${{ matrix.target }}-rattler-pkgs-${{ github.ref }}-
+          ${{ runner.os }}-${{ matrix.target }}-rattler-pkgs-refs/heads/main-
+    - env:
+        MACOSX_DEPLOYMENT_TARGET: '11.0'
+        TARGET_PLATFORM: ${{ matrix.target }}
+      name: Build vesin
+      run: pixi r build-ci vesin $TARGET_PLATFORM
+      shell: bash
+    - env:
+        MACOSX_DEPLOYMENT_TARGET: '11.0'
+        TARGET_PLATFORM: ${{ matrix.target }}
+      name: Build eon
+      run: pixi r build-ci eon $TARGET_PLATFORM
+      shell: bash
+    - env:
+        BINSTAR_TOKEN: ${{ secrets.BINSTAR_TOKEN }}
+        STAGING_BINSTAR_TOKEN: ${{ secrets.BINSTAR_TOKEN }}
+      if: github.event_name == 'push'
+      name: Upload all packages
+      run: |-
+        shopt -s nullglob
+        EXIT_CODE=0
+        for pkg in $(find output -type f \( -name "*.conda" -o -name "*.tar.bz2" \) ); do
+          if ! rattler-build upload anaconda -o metatensor -c main -a $BINSTAR_TOKEN "${pkg}"; then
+            EXIT_CODE=0 # This is a cop out, fix the exit code later
+            # The issue is that there can be duplicates, which are annoying
+          fi
+        done
+        exit $EXIT_CODE
+      shell: bash
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+        - os: ubuntu-22.04
+          target: linux-64
+        - os: macos-13
+          target: osx-64
+        - os: macos-14
+          target: osx-arm64
+        - os: ubuntu-22.04-arm
+          target: linux-aarch64
+name: Build all packages
+on:
+  pull_request:
+    branches:
+    - main
+  push:
+    branches:
+    - main
+  workflow_dispatch: null
