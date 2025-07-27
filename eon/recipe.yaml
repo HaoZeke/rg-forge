@@ -1,0 +1,79 @@
+context:
+  version: "3.00.dev1"
+  build_pre: 1
+  build_num: 0
+  git_rev: 274f99c5f2979afeb380a0fc5d7b82060af2f554
+
+package:
+  name: eon
+  version: ${{ version }}
+
+source:
+  git: https://github.com/TheochemUI/eOn.git
+  rev: ${{ git_rev }}
+
+build:
+  number: ${{ build_num }}
+  string: h${{ hash }}_${{ build_num }}_gc_${{ git_rev[:7] }}
+  skip:
+    - win
+  script:
+    file: build.nu
+
+requirements:
+  build:
+    - ninja
+    - meson
+    - sccache
+    - nushell
+    - if: osx
+      then: llvm-openmp
+  host:
+    - python
+    - ${{ compiler('c') }}
+    - ${{ compiler('cxx') }}
+    - ${{ compiler('fortran') }}
+    - ${{ stdlib('c') }}
+    - eigen >=3.4,<3.5
+    - libblas
+    - libcblas
+    - liblapack
+    - liblapacke
+    - fmt
+    - spdlog
+    - if: osx
+      then: llvm-openmp
+  run:
+    - python
+    - eigen
+    - if: osx
+      then: llvm-openmp
+
+tests:
+  - script:
+      # - python -m eon.server -h
+      # - eonclient
+      - conda inspect linkages -p $PREFIX $PKG_NAME
+      - if: osx
+        then:
+          - conda inspect objects -p $PREFIX $PKG_NAME
+    requirements:
+      run:
+        - conda-build
+
+about:
+  homepage: https://theochemui.github.io/eOn/
+  license: BSD-3-Clause
+  license_family: BSD
+  license_file: LICENSE
+  summary: "Algorithms for long time scales and potential energy surface exploration"
+  description: |
+    The EON software package contains a set of algorithms used primarily to
+    model the evolution of atomic scale systems over long time scales. This
+    version is instrumented for working with Metatensor.
+  documentation: https://theochemui.github.io/eOn/user_guide/index.html
+  repository: https://github.com/TheochemUI/eOn
+
+extra:
+  recipe-maintainers:
+    - HaoZeke
