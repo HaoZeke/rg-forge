@@ -14,7 +14,7 @@ source:
 
 build:
   number: ${{ build_num }}
-  string: h${{ hash }}_${{ build_num }}_gc_${{ git_rev[:7] }}${{ "_lmp" if (lammps_enabled and (not aarch64)) else ""}}${{ "_mts" if metatomic_enabled else ""}}
+  string: h${{ hash }}_${{ build_num }}_gc_${{ git_rev[:7] }}${{ "_lmp" if (lammps_enabled and (not aarch64) and (not osx)) else ""}}${{ "_mts" if metatomic_enabled else ""}}
   dynamic_linking:
     binary_relocation:
       - if: osx
@@ -54,7 +54,8 @@ requirements:
       then: gfortran_impl_osx-64 >14
     - ${{ stdlib('c') }}
     # LAMMPS is not built for linux arm64, should be built for osx-arm64 but fails to find lammps
-    - if: lammps_enabled and (not aarch64)
+    # OSX is broken until it is rebuilt with the new Fortran scheme
+    - if: lammps_enabled and (not aarch64) and (not osx)
       then:
         - lammps * ${{ lammps_version }}*
     - if: metatomic_enabled
@@ -75,7 +76,7 @@ requirements:
     - if: osx
       then: llvm-openmp
   run:
-    - if: lammps_enabled and (not aarch64)
+    - if: lammps_enabled and (not aarch64) and (not osx)
       then:
         - lammps * ${{ lammps_version }}*
     - python
