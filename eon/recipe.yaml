@@ -14,19 +14,15 @@ source:
 
 build:
   number: ${{ build_num }}
-  string: h${{ hash }}_${{ build_num }}_gc_${{ git_rev[:7] }}${{ "_lmp" if (lammps_enabled and (not aarch64) and (not osx)) else ""}}${{ "_mts" if metatomic_enabled else ""}}
+  string: h${{ hash }}_${{ build_num }}_gc_${{ git_rev[:7] }}${{ "_lmp" if (lammps_enabled and (not aarch64) and (not osx)) else ""}}
   dynamic_linking:
     binary_relocation:
       - if: osx
         then: false
-  skip:
-    - win
   script:
     file: build.nu
     env:
       WITH_LAMMPS: ${{ 1 if (lammps_enabled and (not aarch64) and (not osx)) else 0 }}
-      WITH_METATOMIC: ${{ 1 if metatomic_enabled else 0 }}
-
 requirements:
   build:
     - ninja

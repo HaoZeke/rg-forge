@@ -1,19 +1,19 @@
-lammps_enabled:
-  - False
-  # - True
+# lammps_enabled:
+#   - False
+#   # - True
 
-# What about lammps-metatomic?
-lammps_version:
-  - "*"
+# # What about lammps-metatomic?
+# lammps_version:
+#   - "*"
 
-metatomic_enabled:
-  - False
-  - True
+# metatomic_enabled:
+#   - False
+#   - True
 
-zip_keys:
-  - lammps_enabled
-  - metatomic_enabled
-  - lammps_version
+# zip_keys:
+#   - lammps_enabled
+#   - metatomic_enabled
+#   - lammps_version
 
 c_stdlib_version:
   - if: osx

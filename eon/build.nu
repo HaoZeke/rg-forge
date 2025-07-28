@@ -19,15 +19,10 @@ let configure_args = [
     } else {
         []
     })
-    ...(if ($env.WITH_METATOMIC == "1") {
-        [
-        "-Dwith_metatomic=True",
-        "-Dpip_metatomic=False"
-        $"-Dtorch_path=($host_prefix_expanded)"
-        ]
-    } else {
-        []
-    })
+    # Always build metatomic support here
+    "-Dwith_metatomic=True",
+    "-Dpip_metatomic=False"
+    $"-Dtorch_path=($host_prefix_expanded)"
 ]
 
 print $"INFO: Running meson setup with ($configure_args | str join ' ')"
