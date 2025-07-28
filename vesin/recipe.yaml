@@ -15,8 +15,6 @@ source:
 build:
   number: ${{ build_num }}
   string: h${{ hash }}_${{ build_num }}_gc_${{ git_rev[:7] }}
-  skip:
-    - win
   script:
     file: build.nu
     env:
