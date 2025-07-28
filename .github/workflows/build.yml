@@ -57,8 +57,6 @@ jobs:
         include:
         - os: ubuntu-22.04
           target: linux-64
-        - os: windows-latest
-          target: win-64
         - os: macos-13
           target: osx-64
         - os: macos-14

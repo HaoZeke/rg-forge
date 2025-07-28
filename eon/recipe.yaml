@@ -1,6 +1,6 @@
 context:
-  version: "3.00.dev1"
-  build_num: 1
+  version: "3.00.dev2"
+  build_num: 2
   git_rev: 77548c78feb752cd35b5d17155e5a69d65d1d598
 
 package:
@@ -14,6 +14,8 @@ source:
 build:
   number: ${{ build_num }}
   string: h${{ hash }}_${{ build_num }}_gc_${{ git_rev[:7] }}${{ "_lmp" if (lammps_enabled and (not aarch64) and (not osx)) else ""}}
+  skip:
+    - win
   dynamic_linking:
     binary_relocation:
       - if: osx

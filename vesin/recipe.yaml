@@ -1,6 +1,5 @@
 context:
   version: "0.3.7.dev1"
-  build_pre: 1
   build_num: 0
   git_rev: 0a41bc8ba72a770db117a6a5d670c614a71a9d14
 
@@ -15,6 +14,8 @@ source:
 build:
   number: ${{ build_num }}
   string: h${{ hash }}_${{ build_num }}_gc_${{ git_rev[:7] }}
+  skip:
+    - win
   script:
     file: build.nu
     env:

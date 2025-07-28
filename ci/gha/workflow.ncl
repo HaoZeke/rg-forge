@@ -33,7 +33,7 @@ let workflow = {
         matrix = {
           include = [
             { target = "linux-64", os = "ubuntu-22.04" },
-            { target= "win-64",    os= "windows-latest" },
+            # { target= "win-64",    os= "windows-latest" },
             # force older macos-13 to get x86_64 runners
             { target = "osx-64", os = "macos-13" },
             { target = "osx-arm64", os = "macos-14" },
