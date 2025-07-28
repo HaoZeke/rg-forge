@@ -35,3 +35,26 @@ print $"INFO: Running meson setup with ($configure_args | str join ' ')"
 # due to the to_string closure in ENV_CONVERSIONS.
 meson setup bbdir ...$configure_args
 meson install -C bbdir
+
+# --- Post-Install Linking Fix for macOS ---
+# Delete all existing rpaths, and then add back a single correct one.
+if ($env.target_platform | str starts-with "osx") {
+    print "INFO: Running post-install rpath fix for macOS..."
+    let eonclient_path = $"($host_prefix_expanded)/bin/eonclient"
+
+    # Get a list of all current rpaths in the executable
+    let current_rpaths = (otool -l $eonclient_path | grep LC_RPATH -A 2 | lines | where $it =~ 'path' | parse --regex `path\s+(?<path>\S+)` | get path)
+
+    # Delete each existing rpath
+    for rpath in $current_rpaths {
+        print $"INFO: Deleting existing rpath: ($rpath)"
+        install_name_tool -delete_rpath $rpath $eonclient_path
+    }
+
+    # Add a single, correct rpath
+    print "INFO: Adding correct rpath: @loader_path/../lib"
+    install_name_tool -add_rpath "@loader_path/../lib" $eonclient_path
+
+    print "INFO: Rpath fix applied. Verifying with otool:"
+    otool -l $eonclient_path | grep LC_RPATH -A 2
+}
