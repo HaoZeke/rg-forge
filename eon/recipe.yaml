@@ -1,7 +1,6 @@
 context:
   version: "3.00.dev1"
-  build_pre: 1
-  build_num: 0
+  build_num: 1
   git_rev: 77548c78feb752cd35b5d17155e5a69d65d1d598
 
 package:
@@ -54,7 +53,7 @@ requirements:
     - if: lammps_enabled and (not aarch64) and (not osx)
       then:
         - lammps * ${{ lammps_version }}*
-    - if: metatomic_enabled
+    - if: true # metatomic_enabled
       then:
         # always build against the CPU version of libtorch, we can still pick
         # the cuda one at runtime [1]
@@ -81,7 +80,7 @@ requirements:
     - eigen
     - fmt
     - spdlog
-    - if: metatomic_enabled
+    - if: true # metatomic_enabled
       then:
         - libtorch >=2.7,<2.8 cpu*
         - libmetatomic-torch >=0.1.2,<0.2
