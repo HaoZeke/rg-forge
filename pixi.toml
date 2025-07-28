@@ -25,6 +25,6 @@ args = ["pkg"]
 cmd = "rattler-build build --experimental -m conda_build_config.yaml -m {{ pkg }}/variants.yaml --no-build-id --recipe {{ pkg }}"
 
 [dependencies]
-rattler-build = ">=0.42.1,<0.43"
+rattler-build = ">=0.44,<0.45"
 conda-index = ">=0.6.1,<0.7"
 nickel = ">=9.9.9,<10"
