@@ -24,7 +24,7 @@ build:
   script:
     file: build.nu
     env:
-      WITH_LAMMPS: ${{ 1 if (lammps_enabled and (not aarch64)) else 0 }}
+      WITH_LAMMPS: ${{ 1 if (lammps_enabled and (not aarch64) and (not osx)) else 0 }}
       WITH_METATOMIC: ${{ 1 if metatomic_enabled else 0 }}
 
 requirements:
