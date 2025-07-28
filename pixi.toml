@@ -2,7 +2,7 @@
 authors = ["Rohit Goswami <rgoswami[at]ieee.org>"]
 channels = ["https://prefix.dev/rg-forge", "conda-forge", "https://conda.anaconda.org/metatensor"]
 name = "rg-forge"
-platforms = ["linux-64", "osx-arm64", "osx-64", "linux-aarch64"]
+platforms = ["linux-64", "osx-arm64", "osx-64", "linux-aarch64", "win-64"]
 version = "0.1.0"
 description = "Forge for software distributed without official equivalents"
 
