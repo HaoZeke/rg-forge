@@ -1,6 +1,6 @@
 lammps_enabled:
   - False
-  - True
+  # - True
 
 # What about lammps-metatomic?
 lammps_version:
