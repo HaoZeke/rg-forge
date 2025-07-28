@@ -2,7 +2,7 @@ context:
   version: "3.00.dev1"
   build_pre: 1
   build_num: 0
-  git_rev: f10c407f44e90888945ab4c33f91c111e490e46e
+  git_rev: 3a1b78f7a336045dd2c2b6d35b8fd5487ccef4a4
 
 package:
   name: eon
@@ -15,6 +15,10 @@ source:
 build:
   number: ${{ build_num }}
   string: h${{ hash }}_${{ build_num }}_gc_${{ git_rev[:7] }}${{ "_lmp" if (lammps_enabled and (not aarch64)) else ""}}${{ "_mts" if metatomic_enabled else ""}}
+  dynamic_linking:
+    binary_relocation:
+      - if: osx
+        then: false
   skip:
     - win
   script:
@@ -46,6 +50,8 @@ requirements:
     - ${{ compiler('c') }}
     - ${{ compiler('cxx') }}
     - ${{ compiler('fortran') }}
+    - if: osx # xref: https://github.com/scipy/scipy/issues/23361
+      then: gfortran_impl_osx-64 >14
     - ${{ stdlib('c') }}
     # LAMMPS is not built for linux arm64, should be built for osx-arm64 but fails to find lammps
     - if: lammps_enabled and (not aarch64)
