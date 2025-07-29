@@ -1,7 +1,7 @@
 context:
-  version: "3.00.dev3"
+  version: "3.00.dev4"
   build_num: 1
-  git_rev: 37cb1f6d7e2297977bd646a5a44378caac1cf88b
+  git_rev: 9a5343a038893477a220afc3d2748789ffdddaa4
 
 package:
   name: eon
