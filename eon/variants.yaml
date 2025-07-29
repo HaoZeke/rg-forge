@@ -22,3 +22,9 @@ MACOSX_SDK_VERSION:
   - "11.0"
 MACOSX_DEPLOYMENT_TARGET:
   - "11.0"
+
+# Remove when the conda-forge migration for fmt11 (and therefore spdlog115) goes through
+fmt:
+  - '11'
+spdlog:
+  - "*"
