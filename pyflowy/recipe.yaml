@@ -27,7 +27,7 @@ requirements:
   build:
     - ninja
     - meson
-    - xtensor < 0.25.0
+    - xtensor <0.25.0
     - xtensor-blas
     - xtensor-python
     - cmake
@@ -35,11 +35,12 @@ requirements:
     - if: (build_platform != target_platform)
       then:
         - python
-        - cross-python_${{target_platform}}
+        - cross-python_${{ target_platform }}
   host:
     - python
     - meson-python
     - pybind11
+    - pkg-config
     - pip
     - fmt
     - numpy
