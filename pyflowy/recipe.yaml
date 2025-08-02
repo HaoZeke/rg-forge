@@ -21,7 +21,12 @@ build:
     - win
   number: ${{ build_num }}
   string: h${{ hash }}_${{ build_num }}
-  script: ${{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+  script:
+    - if: osx
+      then:
+        - export CXXFLAGS="-stdlib=libc++ $CXXFLAGS"
+        - export CXXFLAGS="${CXXFLAGS} -D_LIBCPP_DISABLE_AVAILABILITY"
+    - ${{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
 
 requirements:
   build:
@@ -40,7 +45,7 @@ requirements:
     - python
     - meson-python
     - pybind11
-    - pkg-config
+    - pkgconfig
     - pip
     - fmt
     - numpy
