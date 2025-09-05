@@ -1,19 +1,18 @@
 context:
-  version: "3.00.dev4"
-  build_num: 1
-  git_rev: 9a5343a038893477a220afc3d2748789ffdddaa4
+  version: "2.8.0"
+  build_num: 0
 
 package:
   name: eon
   version: ${{ version }}
 
 source:
-  git: https://github.com/TheochemUI/eOn.git
-  rev: ${{ git_rev }}
+  url: https://github.com/TheochemUI/eOn/archive/refs/tags/v${{ version }}.tar.gz
+  sha256: ab2c30c69c699242233458a923205fff5464aca711310e31d9acb39472976a11
 
 build:
   number: ${{ build_num }}
-  string: h${{ hash }}_${{ build_num }}_gc_${{ git_rev[:7] }}${{ "_lmp" if (lammps_enabled and (not aarch64) and (not osx)) else ""}}
+  string: h${{ hash }}_${{ build_num }}_gc_${{ version }}${{ "_lmp" if (lammps_enabled and (not aarch64) and (not osx)) else ""}}
   skip:
     - win
   dynamic_linking:
