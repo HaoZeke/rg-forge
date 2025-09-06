@@ -12,7 +12,7 @@ source:
 
 build:
   number: ${{ build_num }}
-  string: h${{ hash }}_${{ build_num }}_gc_${{ version }}${{ "_lmp" if (lammps_enabled and (not aarch64) and (not osx)) else ""}}
+  string: h${{ hash }}_${{ build_num }}_rgf_${{ "_lmp" if (lammps_enabled and (not aarch64) and (not osx)) else ""}}
   skip:
     - win
   dynamic_linking:
