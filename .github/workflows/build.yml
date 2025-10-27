@@ -38,6 +38,12 @@ jobs:
       name: Build eon
       run: pixi r build-ci eon $TARGET_PLATFORM
       shell: bash
+    - env:
+        MACOSX_DEPLOYMENT_TARGET: '11.0'
+        TARGET_PLATFORM: ${{ matrix.target }}
+      name: Build ira
+      run: pixi r build-ci ira $TARGET_PLATFORM
+      shell: bash
     - if: github.event_name == 'push'
       name: Upload all packages
       run: |-
