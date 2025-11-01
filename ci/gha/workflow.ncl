@@ -66,6 +66,7 @@ ${{ runner.os }}-${{ matrix.target }}-rattler-pkgs-refs/heads/main-
         },
         makeBuildStep "vesin",
         makeBuildStep "eon",
+        makeBuildStep "ira",
         {
           name = "Upload all packages",
           shell = "bash",
