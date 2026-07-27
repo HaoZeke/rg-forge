@@ -1,0 +1,68 @@
+context:
+  version: "0.1.0"
+  build_num: 0
+
+package:
+  name: c-capnproto
+  version: ${{ version }}
+
+source:
+  url: https://github.com/HaoZeke/c-capnproto/archive/refs/tags/v${{ version }}.tar.gz
+  sha256: 23af5437aa6eaaf24a3f5b98380ab1e98e8613cc1912acc53704d1ab1185d208
+
+build:
+  number: ${{ build_num }}
+  string: h${{ hash }}_${{ build_num }}_rgf
+  skip:
+    - win
+  script:
+    file: build.nu
+
+requirements:
+  build:
+    - ${{ compiler('c') }}
+    - ${{ compiler('cxx') }}
+    - ${{ stdlib('c') }}
+    - meson
+    - ninja
+    - pkg-config
+    - nushell
+  host:
+    - ${{ stdlib('c') }}
+  run:
+    - ${{ stdlib('c') }}
+
+tests:
+  - script:
+      - test -f $PREFIX/include/capnp_c.h
+      - test -f $PREFIX/lib/pkgconfig/c-capnproto.pc
+      - test -x $PREFIX/bin/capnpc-c
+      - test -e $PREFIX/lib/libcapnp_c.so -o -e $PREFIX/lib/libcapnp_c.dylib -o -e $PREFIX/lib/libcapnp_c.a
+      - pkg-config --exists c-capnproto
+      - pkg-config --modversion c-capnproto
+      - pkg-config --cflags --libs c-capnproto
+      - conda inspect linkages -p $PREFIX $PKG_NAME
+      - if: osx
+        then:
+          - conda inspect objects -p $PREFIX $PKG_NAME
+    requirements:
+      run:
+        - pkg-config
+        - conda-build
+
+about:
+  homepage: https://github.com/HaoZeke/c-capnproto
+  license: MIT
+  license_family: MIT
+  license_file: COPYING
+  summary: "Pure-C Cap'n Proto runtime + capnpc-c (HaoZeke maintained fork)"
+  description: |
+    Cap'n Proto pure-C library (libcapnp_c) and capnpc-c schema plugin.
+    Maintained fork: HaoZeke/c-capnproto (lineage jmckaskill → opensourcerouting → HaoZeke).
+    Does not replace the official C++ Cap'n Proto stack (capnproto package).
+  repository: https://github.com/HaoZeke/c-capnproto
+  documentation: https://github.com/HaoZeke/c-capnproto
+
+extra:
+  recipe-maintainers:
+    - HaoZeke

@@ -29,6 +29,12 @@ jobs:
     - env:
         MACOSX_DEPLOYMENT_TARGET: '11.0'
         TARGET_PLATFORM: ${{ matrix.target }}
+      name: Build c-capnproto
+      run: pixi r build-ci c-capnproto $TARGET_PLATFORM
+      shell: bash
+    - env:
+        MACOSX_DEPLOYMENT_TARGET: '11.0'
+        TARGET_PLATFORM: ${{ matrix.target }}
       name: Build vesin
       run: pixi r build-ci vesin $TARGET_PLATFORM
       shell: bash

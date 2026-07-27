@@ -64,6 +64,7 @@ ${{ runner.os }}-${{ matrix.target }}-rattler-pkgs-refs/heads/main-
 "%,
           }
         },
+        makeBuildStep "c-capnproto",
         makeBuildStep "vesin",
         makeBuildStep "eon",
         makeBuildStep "ira",
