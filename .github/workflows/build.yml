@@ -26,41 +26,49 @@ jobs:
         restore-keys: |-
           ${{ runner.os }}-${{ matrix.target }}-rattler-pkgs-${{ github.ref }}-
           ${{ runner.os }}-${{ matrix.target }}-rattler-pkgs-refs/heads/main-
-    - env:
+    - continue-on-error: true
+      env:
         MACOSX_DEPLOYMENT_TARGET: '11.0'
         TARGET_PLATFORM: ${{ matrix.target }}
       name: Build c-capnproto
       run: pixi r build-ci c-capnproto $TARGET_PLATFORM
       shell: bash
-    - env:
+    - continue-on-error: true
+      env:
         MACOSX_DEPLOYMENT_TARGET: '11.0'
         TARGET_PLATFORM: ${{ matrix.target }}
       name: Build vesin
       run: pixi r build-ci vesin $TARGET_PLATFORM
       shell: bash
-    - env:
+    - continue-on-error: true
+      env:
         MACOSX_DEPLOYMENT_TARGET: '11.0'
         TARGET_PLATFORM: ${{ matrix.target }}
       name: Build eon
       run: pixi r build-ci eon $TARGET_PLATFORM
       shell: bash
-    - env:
+    - continue-on-error: true
+      env:
         MACOSX_DEPLOYMENT_TARGET: '11.0'
         TARGET_PLATFORM: ${{ matrix.target }}
       name: Build ira
       run: pixi r build-ci ira $TARGET_PLATFORM
       shell: bash
-    - if: github.event_name == 'push'
+    - if: always() && github.event_name == 'push'
       name: Upload all packages
       run: |-
         shopt -s nullglob
         EXIT_CODE=0
+        found=0
         for pkg in $(find output -type f \( -name "*.conda" -o -name "*.tar.bz2" \) ); do
+          found=1
           if ! rattler-build upload prefix -c rg-forge "${pkg}"; then
-            EXIT_CODE=0 # This is a cop out, fix the exit code later
-            # The issue is that there can be duplicates, which are annoying
+            EXIT_CODE=0 # duplicates on re-upload are ok
           fi
         done
+        if [[ "$found" -eq 0 ]]; then
+          echo "warning: no packages under output/ to upload" >&2
+        fi
         exit $EXIT_CODE
       shell: bash
     strategy:

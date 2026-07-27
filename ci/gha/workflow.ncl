@@ -5,6 +5,8 @@ let makeBuildStep = fun packageName =>
   {
     name = "Build %{packageName}",
     shell = "bash",
+    # One broken recipe must not skip upload of siblings (e.g. c-capnproto).
+    "continue-on-error" = true,
     env = {
       TARGET_PLATFORM = m%"${{ matrix.target }}"%,
       MACOSX_DEPLOYMENT_TARGET = "11.0",
@@ -71,16 +73,21 @@ ${{ runner.os }}-${{ matrix.target }}-rattler-pkgs-refs/heads/main-
         {
           name = "Upload all packages",
           shell = "bash",
-          "if" = "github.event_name == 'push'",
+          # Run even when a sibling recipe failed (continue-on-error builds).
+          "if" = "always() && github.event_name == 'push'",
           run = m%"
 shopt -s nullglob
 EXIT_CODE=0
+found=0
 for pkg in $(find output -type f \( -name "*.conda" -o -name "*.tar.bz2" \) ); do
+  found=1
   if ! rattler-build upload prefix -c rg-forge "${pkg}"; then
-    EXIT_CODE=0 # This is a cop out, fix the exit code later
-    # The issue is that there can be duplicates, which are annoying
+    EXIT_CODE=0 # duplicates on re-upload are ok
   fi
 done
+if [[ "$found" -eq 0 ]]; then
+  echo "warning: no packages under output/ to upload" >&2
+fi
 exit $EXIT_CODE
 "%,
         },
