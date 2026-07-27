@@ -44,13 +44,6 @@ jobs:
       env:
         MACOSX_DEPLOYMENT_TARGET: '11.0'
         TARGET_PLATFORM: ${{ matrix.target }}
-      name: Build eon
-      run: pixi r build-ci eon $TARGET_PLATFORM
-      shell: bash
-    - continue-on-error: true
-      env:
-        MACOSX_DEPLOYMENT_TARGET: '11.0'
-        TARGET_PLATFORM: ${{ matrix.target }}
       name: Build ira
       run: pixi r build-ci ira $TARGET_PLATFORM
       shell: bash
