@@ -1,6 +1,6 @@
 context:
   version: "0.1.0"
-  build_num: 0
+  build_num: 1
 
 package:
   name: c-capnproto
@@ -37,10 +37,12 @@ tests:
       - test -f $PREFIX/include/capnp_c.h
       - test -f $PREFIX/lib/pkgconfig/c-capnproto.pc
       - test -x $PREFIX/bin/capnpc-c
-      - test -e $PREFIX/lib/libcapnp_c.so -o -e $PREFIX/lib/libcapnp_c.dylib -o -e $PREFIX/lib/libcapnp_c.a
+      - test -f $PREFIX/lib/libcapnp_c.a
+      - test -e $PREFIX/lib/libcapnp_c.so -o -e $PREFIX/lib/libcapnp_c.dylib
       - pkg-config --exists c-capnproto
       - pkg-config --modversion c-capnproto
       - pkg-config --cflags --libs c-capnproto
+      - pkg-config --static --libs c-capnproto
       - conda inspect linkages -p $PREFIX $PKG_NAME
       - if: osx
         then:
