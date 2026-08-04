@@ -1,0 +1,54 @@
+# Static libcapnp_janet.a for x86_64-linux-musl under $PREFIX/musl-static/capnp-janet/.
+context:
+  version: "0.2.0"
+  build_num: 0
+  git_rev: 9d8573be0bba1bc9bf7714b453fc3d1541aa785a
+
+package:
+  name: capnp-janet-musl-static
+  version: ${{ version }}
+
+source:
+  git: https://github.com/HaoZeke/capnp-janet.git
+  rev: ${{ git_rev }}
+
+build:
+  number: ${{ build_num }}
+  string: h${{ hash }}_${{ build_num }}_musl_gc_${{ git_rev[:7] }}
+  skip:
+    - win
+  script:
+    file: build.sh
+
+requirements:
+  build:
+    - zig
+    - meson
+    - ninja
+    - pkg-config
+    - ${{ compiler('c') }}
+    - ${{ stdlib('c') }}
+  host:
+    - ${{ stdlib('c') }}
+  run:
+    - ${{ stdlib('c') }}
+
+tests:
+  - script:
+      - test -f $PREFIX/musl-static/capnp-janet/lib/libcapnp_janet.a
+      - test -f $PREFIX/musl-static/capnp-janet/include/capnp-janet/capnp_message.h
+
+about:
+  homepage: https://github.com/HaoZeke/capnp-janet
+  license: MIT
+  license_family: MIT
+  license_file: LICENSE
+  summary: "musl-static libcapnp_janet.a (x86_64-linux-musl)"
+  description: |
+    Zig-built static Cap'n Janet C runtime for x86_64-linux-musl linking.
+    Layout: $PREFIX/musl-static/capnp-janet/{lib,include}.
+  repository: https://github.com/HaoZeke/capnp-janet
+
+extra:
+  recipe-maintainers:
+    - HaoZeke
