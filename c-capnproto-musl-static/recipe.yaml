@@ -1,0 +1,57 @@
+# Static libcapnp_c.a for x86_64-linux-musl under $PREFIX/musl-static/c-capnproto/.
+# Host tools remain package `c-capnproto` (capnpc-c, shared/static host libs).
+context:
+  version: "0.1.0"
+  build_num: 0
+
+package:
+  name: c-capnproto-musl-static
+  version: ${{ version }}
+
+source:
+  url: https://github.com/HaoZeke/c-capnproto/archive/refs/tags/v${{ version }}.tar.gz
+  sha256: 23af5437aa6eaaf24a3f5b98380ab1e98e8613cc1912acc53704d1ab1185d208
+
+build:
+  number: ${{ build_num }}
+  string: h${{ hash }}_${{ build_num }}_musl
+  # Product musl is linux x86_64; zig can cross-build the .a on any host.
+  skip:
+    - win
+  script:
+    file: build.sh
+
+requirements:
+  build:
+    - zig
+    - meson
+    - ninja
+    - pkg-config
+    - ${{ compiler('c') }}
+    - ${{ stdlib('c') }}
+  host:
+    - ${{ stdlib('c') }}
+  run:
+    - ${{ stdlib('c') }}
+
+tests:
+  - script:
+      - test -f $PREFIX/musl-static/c-capnproto/lib/libcapnp_c.a
+      - test -f $PREFIX/musl-static/c-capnproto/include/capnp_c.h
+      - test -f $PREFIX/musl-static/c-capnproto/lib/pkgconfig/c-capnproto.pc
+
+about:
+  homepage: https://github.com/HaoZeke/c-capnproto
+  license: MIT
+  license_family: MIT
+  license_file: COPYING
+  summary: "musl-static libcapnp_c.a (x86_64-linux-musl)"
+  description: |
+    Zig-built fully static Cap'n C runtime for x86_64-linux-musl linking.
+    Layout: $PREFIX/musl-static/c-capnproto/{lib,include}.
+    Does not replace host package `c-capnproto` (capnpc-c for schema compile).
+  repository: https://github.com/HaoZeke/c-capnproto
+
+extra:
+  recipe-maintainers:
+    - HaoZeke

@@ -67,6 +67,9 @@ ${{ runner.os }}-${{ matrix.target }}-rattler-pkgs-refs/heads/main-
           }
         },
         makeBuildStep "c-capnproto",
+        makeBuildStep "c-capnproto-musl-static",
+        makeBuildStep "capnp-janet",
+        makeBuildStep "capnp-janet-musl-static",
         makeBuildStep "vesin",
         makeBuildStep "ira",
         {

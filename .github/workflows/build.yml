@@ -37,6 +37,27 @@ jobs:
       env:
         MACOSX_DEPLOYMENT_TARGET: '11.0'
         TARGET_PLATFORM: ${{ matrix.target }}
+      name: Build c-capnproto-musl-static
+      run: pixi r build-ci c-capnproto-musl-static $TARGET_PLATFORM
+      shell: bash
+    - continue-on-error: true
+      env:
+        MACOSX_DEPLOYMENT_TARGET: '11.0'
+        TARGET_PLATFORM: ${{ matrix.target }}
+      name: Build capnp-janet
+      run: pixi r build-ci capnp-janet $TARGET_PLATFORM
+      shell: bash
+    - continue-on-error: true
+      env:
+        MACOSX_DEPLOYMENT_TARGET: '11.0'
+        TARGET_PLATFORM: ${{ matrix.target }}
+      name: Build capnp-janet-musl-static
+      run: pixi r build-ci capnp-janet-musl-static $TARGET_PLATFORM
+      shell: bash
+    - continue-on-error: true
+      env:
+        MACOSX_DEPLOYMENT_TARGET: '11.0'
+        TARGET_PLATFORM: ${{ matrix.target }}
       name: Build vesin
       run: pixi r build-ci vesin $TARGET_PLATFORM
       shell: bash

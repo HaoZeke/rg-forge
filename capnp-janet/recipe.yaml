@@ -1,0 +1,55 @@
+# Host Cap'n C runtime used by Janet packs / embedders (public OSS).
+context:
+  version: "0.2.0"
+  build_num: 0
+  # 0.2.0-dev tip; pin by rev until a release tag exists.
+  git_rev: 9d8573be0bba1bc9bf7714b453fc3d1541aa785a
+
+package:
+  name: capnp-janet
+  version: ${{ version }}
+
+source:
+  git: https://github.com/HaoZeke/capnp-janet.git
+  rev: ${{ git_rev }}
+
+build:
+  number: ${{ build_num }}
+  string: h${{ hash }}_${{ build_num }}_gc_${{ git_rev[:7] }}
+  skip:
+    - win
+  script:
+    file: build.sh
+
+requirements:
+  build:
+    - ${{ compiler('c') }}
+    - ${{ stdlib('c') }}
+    - meson
+    - ninja
+    - pkg-config
+  host:
+    - ${{ stdlib('c') }}
+  run:
+    - ${{ stdlib('c') }}
+
+tests:
+  - script:
+      - test -f $PREFIX/include/capnp-janet/capnp_message.h
+      - test -e $PREFIX/lib/libcapnp_janet.a -o -e $PREFIX/lib/libcapnp_janet.so -o -e $PREFIX/lib/libcapnp_janet.dylib
+      - test -x $PREFIX/bin/capnpc-janet
+
+about:
+  homepage: https://github.com/HaoZeke/capnp-janet
+  license: MIT
+  license_family: MIT
+  license_file: LICENSE
+  summary: "Cap'n Proto C runtime + Janet module (HaoZeke)"
+  description: |
+    Wire-format Cap'n C library and capnpc-janet plugin for embedders.
+    Host/shared build for tools; musl-static archives are package capnp-janet-musl-static.
+  repository: https://github.com/HaoZeke/capnp-janet
+
+extra:
+  recipe-maintainers:
+    - HaoZeke

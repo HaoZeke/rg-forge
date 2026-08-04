@@ -1,5 +1,25 @@
 * About
-A forge containing packages not found elsewhere.
+A forge containing packages not found elsewhere (or not yet on conda-forge).
+
+Public channel: ~https://repo.prefix.dev/rg-forge~
+
+** Packages
+
+| Package | Role |
+|---------+------|
+| ~c-capnproto~ | Host Cap'n C runtime + ~capnpc-c~ |
+| ~c-capnproto-musl-static~ | Zig-built ~libcapnp_c.a~ for ~x86_64-linux-musl~ under ~$PREFIX/musl-static/c-capnproto/~ |
+| ~capnp-janet~ | Host Cap'n C library + Janet module + ~capnpc-janet~ |
+| ~capnp-janet-musl-static~ | Zig-built ~libcapnp_janet.a~ for ~x86_64-linux-musl~ under ~$PREFIX/musl-static/capnp-janet/~ |
+| ~ira~ | Iterative Rotations Assignments |
+| ~vesin~ | Neighbor lists (when not on conda-forge) |
+
+Host packages install into the normal conda prefix. ~*-musl-static~ packages install *only* under ~$PREFIX/musl-static/<name>/~ so they do not clash with host shared libs or ~capnpc-*~ tools.
+
+** Private channels
+
+prefix.dev supports private channels (API key / trusted publisher). Use a private channel for non-public artefacts; keep this public channel OSS-only. Auth: ~pixi auth prefix.dev --token …~ then ~rattler-build upload prefix -c <channel> …~.
+
 ** Background
 Much of the groundwork for this was written in the context of the ~mts-forge~ (now [[https://github.com/Luthaf/mts-forge][archived here]]). Eventually it was not found to be as viable for the Metatensor ecosystem as ~conda-forge~ integration. The basic concept still makes for a nice playground so it remains here.
 * License
