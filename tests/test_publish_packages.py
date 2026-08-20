@@ -16,7 +16,11 @@ def run_publisher(tmp_path: Path, fake_exit: int, packages: list[str]) -> tuple[
 
     bin_dir = tmp_path / "bin"
     bin_dir.mkdir()
-    (bin_dir / "rattler-build").write_text("#!/usr/bin/env bash\n" f"exit {fake_exit}\n")
+    (bin_dir / "rattler-build").write_text(
+        "#!/usr/bin/env bash\n"
+        "printf '%s\\n' \"$@\"\n"
+        f"exit {fake_exit}\n"
+    )
     (bin_dir / "rattler-build").chmod(0o755)
     manifest = tmp_path / "manifest.tsv"
     env = {**os.environ, "PATH": f"{bin_dir}:{os.environ['PATH']}"}
@@ -41,6 +45,8 @@ def test_existing_package_upload_is_successful(tmp_path: Path) -> None:
     result, manifest = run_publisher(tmp_path, 0, ["pkg.conda"])
 
     assert result.returncode == 0
+    assert "--skip-existing\n" in result.stdout
+    assert "-c\nrg-forge\n" in result.stdout
     assert manifest.endswith("uploaded\t" + str(tmp_path / "output" / "pkg.conda") + "\n")
 
 
